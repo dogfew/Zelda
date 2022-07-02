@@ -1,4 +1,3 @@
-import pygame
 from settings import *
 from entity import Entity
 from support import *
@@ -12,6 +11,7 @@ class Enemy(Entity):
         self.sprite_type = 'enemy'
 
         # graphics setup
+        self.animations = {'idle': [], 'move': [], 'attack': []}
         self.import_graphics(monster_name)
         self.status = 'idle'
         self.image = self.animations[self.status][self.frame_index]
@@ -55,7 +55,6 @@ class Enemy(Entity):
         self.attack_sound.set_volume(0.6)
 
     def import_graphics(self, name):
-        self.animations = {'idle': [], 'move': [], 'attack': []}
         main_path = f'../graphics/monsters/{name}/'
         for animation in self.animations.keys():
             self.animations[animation] = import_folder(main_path + animation)
@@ -70,7 +69,7 @@ class Enemy(Entity):
         else:
             direction = pygame.math.Vector2()
 
-        return (distance, direction)
+        return distance, direction
 
     def get_status(self, player):
         distance = self.get_player_distance_direction(player)[0]

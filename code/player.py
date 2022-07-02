@@ -12,6 +12,9 @@ class Player(Entity):
         self.hitbox = self.rect.inflate(-6, HITBOX_OFFSET['player'])
 
         # graphics setup
+        self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
+                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
+                           'right_attack': [], 'left_attack': [], 'up_attack': [], 'down_attack': []}
         self.import_player_assets()
         self.status = 'down'
 
@@ -57,10 +60,6 @@ class Player(Entity):
 
     def import_player_assets(self):
         character_path = '../graphics/player/'
-        self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
-                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
-                           'right_attack': [], 'left_attack': [], 'up_attack': [], 'down_attack': []}
-
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
@@ -68,7 +67,6 @@ class Player(Entity):
     def input(self):
         if not self.attacking:
             keys = pygame.key.get_pressed()
-
             # movement input
             if keys[pygame.K_UP] or keys[pygame.K_w]:
                 self.direction.y = -1
@@ -130,13 +128,13 @@ class Player(Entity):
 
         # idle status
         if self.direction.x == 0 and self.direction.y == 0:
-            if not 'idle' in self.status and not 'attack' in self.status:
+            if 'idle' not in self.status and 'attack' not in self.status:
                 self.status = self.status + '_idle'
 
         if self.attacking:
             self.direction.x = 0
             self.direction.y = 0
-            if not 'attack' in self.status:
+            if 'attack' not in self.status:
                 if 'idle' in self.status:
                     self.status = self.status.replace('_idle', '_attack')
                 else:
